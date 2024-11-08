@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Account.cpp" />
     <ClCompile Include="Category.cpp" />
     <ClCompile Include="Contribution.cpp" />
     <ClCompile Include="Conversion.cpp" />
@@ -146,14 +147,17 @@
     <ClCompile Include="lab_3_prog.cpp" />
     <ClCompile Include="Loan.cpp" />
     <ClCompile Include="Transaction.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Account.h" />
     <ClInclude Include="Category.h" />
     <ClInclude Include="Contribution.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Loan.h" />
     <ClInclude Include="Transaction.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
