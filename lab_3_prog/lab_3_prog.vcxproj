@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Analytics.cpp" />
     <ClCompile Include="Category.cpp" />
     <ClCompile Include="Contribution.cpp" />
     <ClCompile Include="Conversion.cpp" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h" />
+    <ClInclude Include="Analytics.h" />
     <ClInclude Include="Category.h" />
     <ClInclude Include="Contribution.h" />
     <ClInclude Include="Conversion.h" />
