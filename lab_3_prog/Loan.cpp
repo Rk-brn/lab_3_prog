@@ -8,9 +8,9 @@ double Loan::calculateRepaymentTime(int monthlyPayment) const {
     // Рассчитываем месячный процент
     double monthlyInterest = rate / 12;
     // Рассчитываем количество месяцев погашения
-    int months = (int)ceil((monthlyInterest * amount) / (monthlyPayment - monthlyInterest * amount));
-    // Преобразуем месяцы в годы
-    return months / 12.0;
+    double months = (amount * monthlyInterest) / (monthlyPayment - amount * monthlyInterest); // Без округления
+    // Преобразуем месяцы в годы 
+    return months / 12.0; // Делим на 12, чтобы получить годы
 }
 
 int Loan::calculateOverpayment(int monthlyPayment, double repaymentTime) const {
