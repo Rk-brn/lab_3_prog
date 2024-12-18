@@ -36,8 +36,8 @@ void Analytics::setTotalExpense(int expense) {
     totalExpense = expense;
 }
 
-void Analytics::setUser(User* userPtr) {
-    user = userPtr;
+void Analytics::setUser(User* user) {
+    this->user = user;
 }
 
 void Analytics::setAccount(Account* accountPtr) {

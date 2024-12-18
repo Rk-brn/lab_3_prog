@@ -1,40 +1,58 @@
 #pragma once
+#include <string>
 #include "Conversion.h"
+#include <stdexcept> // Для обработки исключений
+#include <memory> //Для unique_ptr
 
 class Goal {
-private:
-	char name[100];       // Название цели
-	int target_amount;     // Целевая сумма
-	Conversion* conversion;   // Указатель на объект конвертации валюты
-	Goal* next;
+protected:
+    std::string name;
+    int targetAmount;
+    std::unique_ptr<Conversion> conversion; // Используем unique_ptr для автоматического управления памятью
+    Goal* next;
+
+    virtual void copyFrom(const Goal& other); 
 public:
-	// Конструктор
-	Goal(const char* goalName, int amount, const char* currency, int rate);
+    Goal(const std::string& goalName, int amount, const Conversion& conv);
+    Goal(const Goal& other);
+    ~Goal() = default;
+    const std::string& getName() const;
+    void setName(const std::string& goalName);
+    int getTargetAmount() const;
+    void setTargetAmount(int amount);
+    Goal* getNext() const { return next; }
+    void setNext(Goal* newNext) { next = newNext; }
+    
+    //// Метод поверхностного клонирования
+    //Goal* shallowCopy() const {
+    //    return new Goal(*this); // Используем конструктор копирования
+    //}
 
-	// Деструктор для освобождения памяти
-	~Goal();
+    //// Метод глубокого клонирования
+    //Goal* deepCopy() const {
+    //    Goal* newGoal = new Goal(name, targetAmount, *conversion); //Вызов конструктора Goal
+    //    newGoal->next = nullptr; // Указатель на следующий объект Goal -  пустой
+    //    return newGoal;
+    //}
+   
 
-	// Геттер для названия цели
-	const char* getName() const;
+    //Goal(const Goal& other) = delete; // Запрет конструктора копирования
+    //Goal& operator=(const Goal& other) = delete; // Запрет оператора присваивания
 
-	// Сеттер для названия цели
-	void setName(const char* goalName);
-
-	// Геттер для целевой суммы
-	int getTargetAmount() const;
-
-	// Сеттер для целевой суммы
-	void setTargetAmount(int amount);
-
-	// Геттер для конвертации
-	Conversion* getConversion() const;
-	// Метод для добавления цели в список
-	void addGoal(Goal* newGoal);
-
-	// Метод для удаления цели из списка
-	void removeGoal(Goal* goalToRemove);
-
-	// Метод для конвертации целевой суммы в разные валюты
-	void convertTargetAmount(Conversion* conversion) const;
-
-};
+    std::string extractSubName(size_t startPos, size_t length) const;
+    bool containsKeyword(const std::string& keyword) const;
+    void toUpperName();
+    void addGoal(Goal* newGoal);       // Новый метод
+    void removeGoal(Goal* goalToRemove); // Новый метод
+    virtual void convertTargetAmount(const Conversion& conversion) const; // Новый метод
+    
+    
+    const char* getConversionCurrency() const {
+        if (conversion) return conversion->getCurrency();
+        else return ""; //обработка nullptr
+    }
+    int getConversionRate() const {
+        if (conversion) return conversion->getCurrencyRate();
+        else return 0; //обработка nullptr
+    }
+};  

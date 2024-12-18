@@ -153,11 +153,15 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="Analytics.h" />
+    <ClInclude Include="BankAccount.h" />
     <ClInclude Include="Category.h" />
     <ClInclude Include="Contribution.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Loan.h" />
+    <ClInclude Include="LongGoal.h" />
+    <ClInclude Include="LongTermGoal.h" />
+    <ClInclude Include="PremiumAccount.h" />
     <ClInclude Include="Transaction.h" />
     <ClInclude Include="User.h" />
   </ItemGroup>

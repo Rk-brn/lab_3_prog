@@ -1,8 +1,9 @@
 #pragma once
 #include "Category.h"
-
+#include <iostream>
+#include <string>
 class Transaction {
-private:
+protected:
 	char description[100]; // Описание транзакции
 	int amount;      // Сумма транзакции
 	char date[11];    // Дата транзакции (DD-MM-YYYY)
@@ -13,8 +14,7 @@ public:
 	// Конструктор
 	Transaction(const char* desc, int amt, const char* dt, const char* typ, Category* cat);
 
-	// Деструктор
-	~Transaction() {}
+	
 
 	// Сеттеры
 	void setDescription(const char* desc);
@@ -46,4 +46,15 @@ public:
 	// Метод для удаления транзакции из списка
 	void removeTransaction(Transaction* transactionToRemove);
 
+
+	const std::string& getDescriptionRef() const { return description; }
+	
+	friend void printTransaction(const Transaction& t);
+	
+	
+	/*const std::string* getTypePtr() const { return &type; }*/
+
+	
+
+	~Transaction() = default;
 };

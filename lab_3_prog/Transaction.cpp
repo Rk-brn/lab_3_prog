@@ -17,8 +17,8 @@ void Transaction::setDescription(const char* desc) {
     description[sizeof(description) - 1] = '\0';
 }
 
-void Transaction::setAmount(int amt) {
-    amount = amt;
+void Transaction::setAmount(int amount) {
+    amount = amount;
 }
 
 void Transaction::setDate(const char* dt) {

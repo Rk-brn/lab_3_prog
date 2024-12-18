@@ -1,10 +1,6 @@
 ﻿// lab_3_prog.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
-#include <iostream>
-#include <cstring>
-#include <locale.h>
-#include <string>
 #include "Loan.h"
 #include "Conversion.h"
 #include "Goal.h"
@@ -14,14 +10,226 @@
 #include "Account.h"
 #include "User.h"
 #include "Analytics.h"
+#include "PremiumAccount.h"
+#include "SavingsAccount.h"
+#include "LongGoal.h"
+#include "BankAccount.h"
+
+#include <iomanip> // для std::setw
+#include <memory> // для std::unique_ptr и std::shared_ptr
+#include <iostream>
+#include <cstring>
+#include <locale.h>
+#include <string>
+
 using namespace std;
+
+
+
+
+
+// Дружественная функция для форматированного вывода
+void printTransaction(const Transaction& t) {
+    std::cout << std::setw(20) << t.description << " | "
+        << std::setw(10) << t.amount << " | "
+        << std::setw(10) << t.date << " | "
+        << std::setw(10) << t.type << " | ";
+    if (t.category) {
+        std::cout << t.category->getNameReference();
+    }
+    else {
+        std::cout << "N/A";
+    }
+    std::cout << std::endl;
+}
+
+
+int Account::accountCount = 0; // Инициализация статического поля
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main()
 {
     setlocale(LC_ALL, "Rus");
 
+    
+    
+    //Category cat1("Продукты");
+
+    //Account acc1("Личный счет");
+
+    //
+    //acc1.printBalance();
+
+    //SavingsAccount savings("Сберегательный", 5); // 5% годовых
+    //savings.addTransaction("Пополнение", 100000, "28-10-2024", "income", &cat1);
+    //
+    ////// Демонстрация PremiumAccount
+    //PremiumAccount premiumAccount("Премиум", 1000);
+    //premiumAccount.addTransaction("Покупка", 50000, "10-10-2024", "expense", &cat1, 50);
+    //cout << "\nБаланс бонусных баллов на премиум аккаунте: " << premiumAccount.getBonusPoints() << endl;
+
+    //savings.printBalance();
+    //premiumAccount.printBalance();
+
+    //// Вызов через указатели
+    //Account* accountPtr;
+
+    //accountPtr = &acc1;
+    //accountPtr->printBalance(); // Выведет 0.0
+
+    //accountPtr = &savings;
+    //accountPtr->printBalance(); 
+
+    //accountPtr = &premiumAccount;
+    //accountPtr->printBalance(); 
+
+
+    ////Conversion convUSD("USD", 75);
+    ////
+    ////LongTermGoal longTermGoal("Дом", 2000000, convUSD, 7); // 7% годовых (демонстрация вызова конструктора базоваго класса)
+    ////longTermGoal.convertTargetAmount(convUSD);
+    //
+
+
+    //Conversion conv1("USD", 75);
+    ////Goal* goal1 = new Goal("Отпуск", 150000, convUSD);
+
+    //// Поверхностное клонирование
+    ////Goal* goal2 = goal1->shallowCopy();
+    ////std::cout << "\nПоверхностное клонирование:\n";
+    ////std::cout << "goal1: " << goal1->getName() << ", targetAmount: " << goal1->getTargetAmount() << std::endl;
+    ////std::cout << "goal2: " << goal2->getName() << ", targetAmount: " << goal2->getTargetAmount() << std::endl;
+
+    ////// Глубокое клонирование
+    ////Goal* goal3 = goal1->deepCopy();
+    ////std::cout << "\nГлубокое клонирование:\n";
+    ////std::cout << "goal1: " << goal1->getName() << ", targetAmount: " << goal1->getTargetAmount() << ", валюта: " << goal1->getConversionCurrency() << ", курс: " << goal1->getConversionRate() << std::endl;
+    ////std::cout << "goal3: " << goal3->getName() << ", targetAmount: " << goal3->getTargetAmount() << ", валюта: " << goal3->getConversionCurrency() << ", курс: " << goal3->getConversionRate()<< std::endl;
+
+
+
+    //Conversion conv2("EUR", 85);
+
+    //Goal* goal1 = new Goal("Купить машину", 1500000, conv1);
+    //LongTermGoal* goal2 = new LongTermGoal("Собрать на квартиру", 5000000, conv2, 5); // 5% годовых
+
+    //// Присваивание объекта Goal объекту LongTermGoal
+    //LongTermGoal goal3("Путешествие", 200000, conv1, 0); //Создаем объект LongTermGoal для присваивания
+    //goal3 = *goal1; // Присваиваем goal1 goal3, используя перегруженный оператор =
+
+
+    //std::cout << "Цель 1: " << goal1->getName() << ", сумма: " << goal1->getTargetAmount() << " руб., валюта: " << goal1->getConversionCurrency() << std::endl;
+    //std::cout << "Цель 2: " << goal2->getName() << ", сумма: " << goal2->getTargetAmount() << " руб., валюта: " << goal2->getConversionCurrency() << std::endl;
+    //std::cout << "Цель 3 (после присваивания): " << goal3.getName() << ", сумма: " << goal3.getTargetAmount() << " руб., валюта: " << goal3.getConversionCurrency() << ", процент: " << goal3.getInRate() << std::endl;
+
+
+    //goal1->convertTargetAmount(conv1);
+    //goal2->convertTargetAmount(conv2);
+    //goal3.convertTargetAmount(conv1);
+
+    
+
+
+     //Демонстрация важности виртуального деструктора
+    
+
+
+    Category cat1("Продукты");
+    
+    
+    Category cat2("Продукты");
+    Category cat3("Развлечения");
+
+
+    Category cat4 = cat1; // Используем конструктор копирования Category
+    std::cout << "Категория 1: " << cat1.getNameReference() << std::endl;
+    std::cout << "Категория 4: " << cat4.getNameReference() << std::endl;
+
+    Transaction transaction1("Покупка продуктов", 1000, "2024-10-27", "расход", &cat1);
+    Transaction transaction2("Покупка хлеба", 1000, "2024-10-27", "расход", &cat2);
+    Transaction transaction3("Покупка продуктов", 1000, "2024-10-27", "расход", &cat3);
+
+
+   
+   
+
+    // Печатаем имя категории через указатель
+    std::cout << "Имя категории через указатель: " << *cat1.getNamePointer() << std::endl;
+
+    // Печатаем имя категории через ссылку
+    std::cout << "Имя категории через ссылку: " << cat1.getNameReference() << std::endl;
+
+
+    std::cout << "\nОтформатированные транзакции:\n";
+    printTransaction(transaction1);
+    printTransaction(transaction2);
+    printTransaction(transaction3);
+
+
+    Contribution contrib1(5, 1000);
+    Contribution contrib2(3, 1500);
+
+    // Пример использования перегрузки оператора сложения
+    Contribution contrib3 = contrib1 + contrib2;
+    std::cout << "\n\nСложенный вклад: " << contrib3 << std::endl;
+
+    // Пример использования перегрузки оператора вывода
+    std::cout << "Вклад 1: " << contrib1 << std::endl;
+    std::cout << "Вклад 2: " << contrib2 << std::endl;
+
+    // Пример использования перегрузки оператора присваивания
+    Contribution contrib4;
+    contrib4 = contrib1;
+    std::cout << "Присваивание вкладу №4 значения вклада №1: " << contrib4 << std::endl;
+
+
+    Conversion convUSD("USD", 75);
+    Goal goal1("Отпуск в Испании", 150000, convUSD);
+
+   
+    std::cout << "Подстрока названия: " << goal1.extractSubName(0, 10) << std::endl;
+    std::cout << "Содержит ли \"Испании\": " << (goal1.containsKeyword("Испании") ? "Да" : "Нет") << std::endl;
+    goal1.toUpperName();
+    std::cout << "Название в верхнем регистре: " << goal1.getName() << std::endl;
+
+    
+    Goal goal2("Отпуск", 15000, convUSD);
+
+    std::cout << "Цель 1: " << goal2.getName() << ", сумма: " << goal2.getTargetAmount()
+        << ", валюта: " << goal2.getConversionCurrency() << ", курс: " << goal2.getConversionRate() << std::endl;
+
+    Goal goal3 = goal2; // Используем конструктор копирования
+
+    std::cout << "Цель 2: " << goal3.getName() << ", сумма: " << goal3.getTargetAmount()
+        << ", валюта: " << goal3.getConversionCurrency() << ", курс: " << goal3.getConversionRate() << std::endl;
+
+    
+   
+    Account* acc1 = new Account("Счет 1");
+    Account* acc2 = new Account("Счет 2");
+    std::cout << "Количество счетов: " << Account::getAccountCount() << std::endl;
+
+    
+    
+    std::cout << "Количество счетов после удаления: " << Account::getAccountCount() << std::endl;
+    return 0;
+    
+  
+    
+
     // Демонстрация работы с динамическим массивом объектов класса Loan
-        cout << "Демонстрация работы с динамическим массивом объектов класса Loan:" << endl;
+    cout << "Демонстрация работы с динамическим массивом объектов класса Loan:" << endl;
     int numLoans;
     cout << "Введите количество кредитов: ";
     cin >> numLoans;
@@ -104,7 +312,7 @@ int main()
             cout << "Тип: " << currentTransaction->getType() << endl;
             // Вывод названия категории, если она задана
             if (currentTransaction->getCategory() != nullptr) {
-                cout << "Категория: " << currentTransaction->getCategory()->getName() << endl;
+                cout << "Категория: " << currentTransaction->getCategory()->getNamePointer() << endl;
             }
             currentTransaction = currentTransaction->getNext();
         }
@@ -145,7 +353,7 @@ int main()
         cout << "Тип: " << currentTransaction->getType() << endl;
         // Вывод названия категории, если она задана
         if (currentTransaction->getCategory() != nullptr) {
-            cout << "Категория: " << currentTransaction->getCategory()->getName() << endl;
+            cout << "Категория: " << currentTransaction->getCategory()->getNamePointer() << endl;
         }
         currentTransaction = currentTransaction->getNext();
     }

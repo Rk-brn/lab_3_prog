@@ -29,4 +29,12 @@ public:
     // Метод для удаления валюты из списка конвертации
     void removeConversion(Conversion* conversionToRemove);
 
+    Conversion& operator=(const Conversion& other) {
+        if (this != &other) {
+            strncpy_s(currency, other.currency, sizeof(currency));
+            currency_rate = other.currency_rate;
+            next = nullptr; // этот указатель не используется
+        }
+        return *this;
+    }
 };

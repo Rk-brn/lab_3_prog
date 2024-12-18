@@ -7,16 +7,12 @@ Account::Account(const char* accountName) : next(nullptr) {
     name[sizeof(name) - 1] = '\0';
     transactions = nullptr;
     transactionCount = 0;
+    balance = 0;
+    accountCount++;
+    std::cout << "Конструктор базового класса: " << name << std::endl;
 }
 
-Account::~Account() {
-    Transaction* current = transactions;
-    while (current != nullptr) {
-        Transaction* next = current->getNext();
-        delete current;
-        current = next;
-    }
-}
+
 
 const char* Account::getName() const {
     return name;

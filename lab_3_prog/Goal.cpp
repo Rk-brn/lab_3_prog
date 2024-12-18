@@ -1,54 +1,80 @@
-// Goal.cpp
 #include "Goal.h"
+#include <algorithm>
+#include <cctype>
 #include <iostream>
-using namespace std;
+#include <stdexcept>
+#include <string> // для std::string
 
-Goal::Goal(const char* goalName, int amount, const char* currency, int rate)
-    : target_amount(amount), next(nullptr) {
-    strncpy_s(name, goalName, sizeof(name) - 1);
-    name[sizeof(name) - 1] = '\0';
-    conversion = new Conversion(currency, rate);
-}
 
-Goal::~Goal() {
-    delete conversion;
-}
 
-const char* Goal::getName() const {
+
+Goal::Goal(const std::string& goalName, int amount, const Conversion& conv) : name(goalName), targetAmount(amount), conversion(new Conversion(conv)), next(nullptr) {}
+
+Goal::Goal(const Goal& other) : name(other.name), targetAmount(other.targetAmount), conversion(new Conversion(*other.conversion)), next(nullptr) {}
+
+
+
+const std::string& Goal::getName() const {
     return name;
 }
 
-void Goal::setName(const char* goalName) {
-    strncpy_s(name, goalName, sizeof(name) - 1);
-    name[sizeof(name) - 1] = '\0';
+void Goal::setName(const std::string& goalName) {
+    name = goalName;
 }
 
 int Goal::getTargetAmount() const {
-    return target_amount;
+    return targetAmount;
 }
 
 void Goal::setTargetAmount(int amount) {
-    target_amount = amount;
+    targetAmount = amount;
 }
 
-Conversion* Goal::getConversion() const {
-    return conversion;
+
+
+
+
+
+std::string Goal::extractSubName(size_t startPos, size_t length) const {
+    if (startPos >= name.length() || startPos + length > name.length()) {
+        throw std::out_of_range("Недопустимый диапазон для извлечения подстроки.");
+    }
+    return name.substr(startPos, length);
+}
+
+bool Goal::containsKeyword(const std::string& keyword) const {
+    return name.find(keyword) != std::string::npos;
+}
+
+void Goal::toUpperName() {
+    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 }
 
 void Goal::addGoal(Goal* newGoal) {
-    newGoal->next = this;
+    if (newGoal == nullptr) {
+        throw std::invalid_argument("Нельзя добавить пустой указатель.");
+    }
+    newGoal->next = this->next;
     this->next = newGoal;
 }
 
 void Goal::removeGoal(Goal* goalToRemove) {
-    // Если цель - первая в списке
+    if (goalToRemove == nullptr) {
+        throw std::invalid_argument("Нельзя удалить пустой указатель.");
+    }
     if (this == goalToRemove) {
-        next = goalToRemove->next;
-        delete goalToRemove;
-        return;
+        if (this->next != nullptr) {
+            Goal* temp = this->next;
+            this->next = nullptr;
+            delete this;
+            return;
+        }
+        else {
+            delete this;
+            return;
+        }
     }
 
-    // Ищем цель в списке
     Goal* current = this;
     while (current->next != nullptr) {
         if (current->next == goalToRemove) {
@@ -58,11 +84,21 @@ void Goal::removeGoal(Goal* goalToRemove) {
         }
         current = current->next;
     }
+    throw std::runtime_error("Цель не найдена в списке.");
 }
 
-void Goal::convertTargetAmount(Conversion* conversion) const {
-    if (conversion != nullptr) {
-        int convertedAmount = conversion->convert(target_amount);
-        std::cout << "Целевая сумма в " << conversion->getCurrency() << ": " << convertedAmount << std::endl;
+void Goal::convertTargetAmount(const Conversion& conv) const {
+    if (!conv.getCurrency()) {
+        throw std::runtime_error("Неверная валюта для конвертации.");
     }
+    double rubles = targetAmount;
+    double convertedAmount = rubles / conv.getCurrencyRate();
+    std::cout << "Целевая сумма в " << conv.getCurrency() << ": " << convertedAmount << std::endl;
+}
+
+void Goal::copyFrom(const Goal& other) {
+    name = other.name;
+    targetAmount = other.targetAmount;
+    conversion = std::make_unique<Conversion>(*other.conversion); // Глубокое копирование Conversion
+    next = nullptr; // next не копируется
 }
