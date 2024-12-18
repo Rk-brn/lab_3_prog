@@ -84,6 +84,29 @@ private:
 
 
 
+class AccountManager : public BankAccount {
+public:
+    AccountManager() : currentAccount(new SavingsAccount()) {}
+    ~AccountManager() override { delete currentAccount; }
+
+    void deposit(int amount) override { currentAccount->deposit(amount); }
+    void withdraw(int amount) override { currentAccount->withdraw(amount); }
+    void printBalance() override { currentAccount->printBalance(); }
+    std::string getAccountType() const override { return currentAccount->getAccountType(); }
+
+    void switchToSavings() {
+        delete currentAccount;
+        currentAccount = new SavingsAccount();
+    }
+
+    void switchToCheckings() {
+        delete currentAccount;
+        currentAccount = new CheckingAccount();
+    }
+
+private:
+    BankAccount* currentAccount;
+};
 
 
 
@@ -95,7 +118,20 @@ int main()
 {
     setlocale(LC_ALL, "Rus");
 
-    
+    AccountManager manager;
+
+    std::cout << "Начальный тип счёта: " << manager.getAccountType() << std::endl;
+    manager.deposit(1000);
+    manager.printBalance();
+    manager.withdraw(500);
+    manager.printBalance();
+
+    manager.switchToCheckings();
+    std::cout << "Счёт после изменения вида: " << manager.getAccountType() << std::endl;
+    manager.deposit(200);
+    manager.printBalance();
+    manager.withdraw(300); 
+    manager.printBalance();
     
     //Category cat1("Продукты");
 
