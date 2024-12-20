@@ -22,6 +22,7 @@
 #include <locale.h>
 #include <string>
 #include <vector>
+#include <map>
 #include <algorithm>
 
 
@@ -138,49 +139,44 @@ int main()
     manager.printBalance();
 
 
-    std::vector<Account*> accounts;
+    std::map<std::string, Account*> accountsByName;
 
-    accounts.push_back(new Account("Account 1")); // Базовый класс
-    accounts.push_back(new SavingsAccount("Сберегательный счет", 5));
-    accounts.push_back(new PremiumAccount("Премиум счет", 100));
+    accountsByName["Счет 1"] = new Account("Счет 1");
+    accountsByName["Сберегательный счет"] = new SavingsAccount("Сберегательный счет", 5);
+    accountsByName["Премиум счет"] = new PremiumAccount("Премиум счет", 100);
 
     // Добавление транзакций (пример)
-    accounts[0]->addTransaction("Перевод", 1000, "2024-10-26", "Credit", nullptr, 0);
-    accounts[1]->addTransaction("Зарплата", 5000, "2024-10-27", "Credit", nullptr, 0);
-    accounts[2]->addTransaction("Покупка", -200, "2024-10-28", "Debit", nullptr, 5);
+    accountsByName["Счет 1"]->addTransaction("Перевод", 1000, "2024-10-26", "Credit", nullptr, 0);
+    accountsByName["Сберегательный счет"]->addTransaction("Зарплата", 5000, "2024-10-27", "Credit", nullptr, 0);
+    accountsByName["Премиум счет"]->addTransaction("Покупка", -200, "2024-10-28", "Debit", nullptr, 5);
 
 
-    // Сортировка по имени счета (в алфавитном порядке)
-    std::sort(accounts.begin(), accounts.end(), [](Account* a, Account* b) {
-        return std::string(a->getName()) < std::string(b->getName());
-        });
-
-    // Вывод информации о счетах после сортировки
-    for (Account* account : accounts) {
-        std::cout << account->getName() << ": ";
-        account->printBalance(); // Полиморфизм в действии!
+    // Вывод информации о счетах
+    for (const auto& pair : accountsByName) {
+        std::cout << pair.first << ": ";
+        pair.second->printBalance();
         std::cout << std::endl;
     }
 
-    // Поиск счета по имени
-    auto it = std::find_if(accounts.begin(), accounts.end(), [](Account* a) {
-        return std::string(a->getName()) == "Сберегательный счет";
-        });
 
-    if (it != accounts.end()) {
-        std::cout << "\nНайден счет: " << (*it)->getName() << std::endl;
+    // Поиск счета по имени
+    std::string accountNameToFind = "Сберегательный счет";
+    auto it = accountsByName.find(accountNameToFind);
+    if (it != accountsByName.end()) {
+        std::cout << "\nНайден счет: " << it->first << std::endl;
+        it->second->printBalance();
     }
     else {
         std::cout << "\nСчет не найден." << std::endl;
     }
 
-    
-    for (Account* account : accounts) {
-        delete account;
+   
+    for (const auto& pair : accountsByName) {
+        delete pair.second;
     }
-    accounts.clear();
+    accountsByName.clear(); // очищаем map
+   
 
-    
     
     return 0;
 
