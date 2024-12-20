@@ -150,7 +150,29 @@ int main()
     accounts[2]->addTransaction("Покупка", -200, "2024-10-28", "Debit", nullptr, 5);
 
 
-    
+    // Сортировка по имени счета (в алфавитном порядке)
+    std::sort(accounts.begin(), accounts.end(), [](Account* a, Account* b) {
+        return std::string(a->getName()) < std::string(b->getName());
+        });
+
+    // Вывод информации о счетах после сортировки
+    for (Account* account : accounts) {
+        std::cout << account->getName() << ": ";
+        account->printBalance(); // Полиморфизм в действии!
+        std::cout << std::endl;
+    }
+
+    // Поиск счета по имени
+    auto it = std::find_if(accounts.begin(), accounts.end(), [](Account* a) {
+        return std::string(a->getName()) == "Сберегательный счет";
+        });
+
+    if (it != accounts.end()) {
+        std::cout << "\nНайден счет: " << (*it)->getName() << std::endl;
+    }
+    else {
+        std::cout << "\nСчет не найден." << std::endl;
+    }
 
     
     for (Account* account : accounts) {
