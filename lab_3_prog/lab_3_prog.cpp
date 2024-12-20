@@ -157,7 +157,16 @@ int main()
         pair.second->printBalance();
         std::cout << std::endl;
     }
+    // Доступ по ключу (пример)
+    std::string keyToAccess = "Счет 1";
+    if (accountsByName.count(keyToAccess) > 0) {
+        std::cout << "\nИнформация о счете '" << keyToAccess << "':\n";
+        accountsByName[keyToAccess]->printBalance();
 
+    }
+    else {
+        std::cout << "\nСчет с таким именем не найден.\n";
+    }
 
     // Поиск счета по имени
     std::string accountNameToFind = "Сберегательный счет";
