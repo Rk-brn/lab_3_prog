@@ -11,7 +11,7 @@
 #include "User.h"
 #include "Analytics.h"
 #include "PremiumAccount.h"
-
+#include "SavingsAccount.h"
 #include "LongGoal.h"
 #include "BankAccount.h"
 
@@ -21,6 +21,9 @@
 #include <cstring>
 #include <locale.h>
 #include <string>
+#include <vector>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -49,10 +52,10 @@ int Account::accountCount = 0; // Инициализация статическ�
 
 
 
-class SavingsAccount : public BankAccount {
+class SavingAccount : public BankAccount {
 public:
-    SavingsAccount(int initialBalance = 0) : balance(initialBalance) {}
-    ~SavingsAccount() override = default;
+    SavingAccount(int initialBalance = 0) : balance(initialBalance) {}
+    ~SavingAccount() override = default;
     void deposit(int amount) override { balance += amount; }
     void withdraw(int amount) override {
         if (balance >= amount) {
@@ -86,7 +89,7 @@ private:
 
 class AccountManager : public BankAccount {
 public:
-    AccountManager() : currentAccount(new SavingsAccount()) {}
+    AccountManager() : currentAccount(new SavingAccount()) {}
     ~AccountManager() override { delete currentAccount; }
 
     void deposit(int amount) override { currentAccount->deposit(amount); }
@@ -96,7 +99,7 @@ public:
 
     void switchToSavings() {
         delete currentAccount;
-        currentAccount = new SavingsAccount();
+        currentAccount = new SavingAccount();
     }
 
     void switchToCheckings() {
@@ -107,6 +110,7 @@ public:
 private:
     BankAccount* currentAccount;
 };
+
 
 
 
@@ -132,7 +136,34 @@ int main()
     manager.printBalance();
     manager.withdraw(300); 
     manager.printBalance();
+
+
+    std::vector<Account*> accounts;
+
+    accounts.push_back(new Account("Account 1")); // Базовый класс
+    accounts.push_back(new SavingsAccount("Сберегательный счет", 5));
+    accounts.push_back(new PremiumAccount("Премиум счет", 100));
+
+    // Добавление транзакций (пример)
+    accounts[0]->addTransaction("Перевод", 1000, "2024-10-26", "Credit", nullptr, 0);
+    accounts[1]->addTransaction("Зарплата", 5000, "2024-10-27", "Credit", nullptr, 0);
+    accounts[2]->addTransaction("Покупка", -200, "2024-10-28", "Debit", nullptr, 5);
+
+
     
+
+    
+    for (Account* account : accounts) {
+        delete account;
+    }
+    accounts.clear();
+
+    
+    
+    return 0;
+
+
+
     //Category cat1("Продукты");
 
     //Account acc1("Личный счет");
@@ -429,7 +460,7 @@ int main()
     ////Освобождение памяти, выделенной под объекты Account и Category
     //delete account;
     //delete category;
-    return 0;
+    
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

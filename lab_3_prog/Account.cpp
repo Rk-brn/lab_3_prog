@@ -31,7 +31,7 @@ void Account::setName(const char* accountName) {
     name[sizeof(name) - 1] = '\0';
 }
 
-void Account::addTransaction(const char* desc, int amt, const char* dt, const char* typ, Category* cat) {
+void Account::addTransaction(const char* desc, int amt, const char* dt, const char* typ, Category* cat, int extraData = 0) {
     Transaction* newTransaction = new Transaction(desc, amt, dt, typ, cat);
 
     if (transactions == nullptr) {
@@ -44,8 +44,9 @@ void Account::addTransaction(const char* desc, int amt, const char* dt, const ch
         }
         current->setNext(newTransaction);
     }
-
+    transactionCount = extraData;
     transactionCount++;
+    balance = amt;
 }
 
 void Account::addAccount(Account* newAccount) {

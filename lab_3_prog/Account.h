@@ -30,7 +30,7 @@ public:
 	// Сеттер для имени счета
 	void setName(const char* accountName);
 
-	void addTransaction(const char* desc, int amt, const char* dt, const char* typ, Category* cat);
+	void addTransaction(const char* desc, int amt, const char* dt, const char* typ, Category* cat, int extraData);
 
 	// Метод для добавления нового счета в список
 	void addAccount(Account* newAccount);
